@@ -436,22 +436,6 @@ public class Main {
         }
     }
 
-    private static void showRegistrationOptions() {
-        System.out.println("\n1. Зареєструватись як клієнт");
-        System.out.println("2. Зареєструватись як менеджер");
-        System.out.println("3. Повернутись назад");
-
-        System.out.print("\nОберіть опцію: ");
-        String choice = scanner.nextLine().trim();
-
-        switch (choice) {
-            case "1" -> registerUser(UserType.CLIENT);
-            case "2" -> registerUser(UserType.MANAGER);
-            case "3" -> {}
-            default -> System.out.println("[ERROR] Невірний вибір");
-        }
-    }
-
     private static void shutdownSystem() {
         System.out.println("\n" + "=".repeat(60));
         System.out.println("ЗАВЕРШЕННЯ РОБОТИ СИСТЕМИ");
