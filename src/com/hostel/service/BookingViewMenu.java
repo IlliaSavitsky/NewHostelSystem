@@ -336,7 +336,7 @@ public class BookingViewMenu {
         System.out.print("\nНадіслати відгук? (так/ні): ");
         String confirm = scanner.nextLine().trim().toLowerCase();
 
-        if (confirm.equals("так") || confirm.equals("yes") || response.equals("y")) {
+        if (confirm.equals("так") || confirm.equals("yes") || confirm.equals("y")) {
             boolean success = reviewService.submitReview(
                     booking.getId(), booking.getClientId(),
                     booking.getHostelId(), rating, comment
