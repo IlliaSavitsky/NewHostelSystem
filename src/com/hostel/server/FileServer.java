@@ -53,9 +53,21 @@ public class FileServer {
     private static void loadAllData() {
         System.out.println("[SERVER] Завантаження даних з файлів...");
 
-        usersCache = loadFromFile(DATA_DIR + "users.json",
-                new TypeToken<Map<String, User>>(){}.getType());
-        if (usersCache == null) usersCache = new ConcurrentHashMap<>();
+        // Завантажуємо Client та Manager окремо
+        Map<String, Client> clients = loadFromFile(DATA_DIR + "clients.json",
+                new TypeToken<Map<String, Client>>(){}.getType());
+
+        Map<String, Manager> managers = loadFromFile(DATA_DIR + "managers.json",
+                new TypeToken<Map<String, Manager>>(){}.getType());
+
+        // Об'єднуємо в один кеш
+        usersCache = new ConcurrentHashMap<>();
+        if (clients != null) {
+            clients.forEach((id, client) -> usersCache.put(id, client));
+        }
+        if (managers != null) {
+            managers.forEach((id, manager) -> usersCache.put(id, manager));
+        }
 
         hostelsCache = loadFromFile(DATA_DIR + "hostels.json",
                 new TypeToken<Map<String, Hostel>>(){}.getType());
@@ -129,9 +141,25 @@ public class FileServer {
         return null;
     }
 
+    private static void saveUsers() {
+        Map<String, Client> clients = new HashMap<>();
+        Map<String, Manager> managers = new HashMap<>();
+
+        for (User user : usersCache.values()) {
+            if (user instanceof Client) {
+                clients.put(user.getId(), (Client) user);
+            } else if (user instanceof Manager) {
+                managers.put(user.getId(), (Manager) user);
+            }
+        }
+
+        saveToFile(DATA_DIR + "clients.json", clients);
+        saveToFile(DATA_DIR + "managers.json", managers);
+    }
+
     public static boolean saveUser(User user) {
         usersCache.put(user.getId(), user);
-        saveToFile(DATA_DIR + "users.json", usersCache);
+        saveUsers(); // Використовуємо новий метод
         totalOperations++;
         logEvent("Збережено користувача: " + user.getId());
         return true;
