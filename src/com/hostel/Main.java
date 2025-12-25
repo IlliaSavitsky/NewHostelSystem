@@ -134,8 +134,10 @@ public class Main {
                 showAnonymousMenu();
             } else if (currentUser.getUserType() == UserType.CLIENT) {
                 showClientMenu();
-            } else {
+            } else if (currentUser.getUserType() == UserType.MANAGER) {
                 showManagerMenu();
+            } else {
+                showMainMenu();
             }
         }
     }
